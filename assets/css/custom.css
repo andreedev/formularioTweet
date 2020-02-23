@@ -27,13 +27,48 @@ h1, h2 {
 }
 
 body{
-    background-color: #ccc;
+    background-color: #fff;
 }
 
-.inputBorderNormal{
-    border-top-color: #0d8ab1;
-    border-right-color: rgb(13, 138, 177);
-    border-bottom-color: rgb(13, 138, 177);
-    border-left-color: rgb(13, 138, 177);
-    outline-color: initial;
+#lista-tweets li{
+    list-style: none;
+    margin: 0 0;
+    padding: 10px;
+    /* border: 1px solid #000; */
+    /* background-color: rgb(113, 170, 255); */
+}
+
+#lista-tweets p{
+    float: left;
+    width: 90%;
+    margin: 0 0 -20px 0;
+    padding: 5px;
+}
+
+#lista-tweets .fa-trash-alt{
+    float: left;
+    width: 5%;
+    margin: 5px 0 0 5px;
+    padding: 0px 0px;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  /* 1 */
+  display: table;
+  /* 2 */
+}
+
+.clearfix:after {
+  clear: both;
 }

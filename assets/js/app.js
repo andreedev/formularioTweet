@@ -45,19 +45,23 @@ function agregarTweet(e) {
     } else{
         resetearBordeInput();
         //crear boton de eliminar
-        const botonBorrar = document.createElement('a');
-        //añade estilos por medio de una clase al botonBorrar
-        botonBorrar.classList = 'borrar-tweet';
-        //escribe una X en el botonBorrar
-        botonBorrar.innerText = 'X';
+        const botonBorrar = document.createElement('i');
+        botonBorrar.classList = 'fas fa-trash-alt';
         
-        //crear elemento y añadirle el contenido a la lista
+        //crear un elemento li
         const li = document.createElement('li');
-        //añade el tweet al li
-        li.innerText = tweet;
-        //añade el boton de borrar al tweet
+        //le añade la clase clearfix al li
+        li.classList = 'clearfix';
+        //crea un elemento p
+        const p = document.createElement('p');
+        //añade el texto del tweet al parrafo
+        p.innerText = tweet;
+        //añade el parrafo al li
+        li.appendChild(p);
+        //añade el botonBorrar al li
         li.appendChild(botonBorrar);
-        //añade el tweet a la lista total
+        
+        //añade el li a la lista total de tweets
         listaTweets.appendChild(li);
         
         //añadir al Local Storage
@@ -68,7 +72,7 @@ function agregarTweet(e) {
 //Elimina el tweet del DOM
 function borrarTweet(e) {
     e.preventDefault();
-    if (e.target.className === 'borrar-tweet') {
+    if (e.target.className === 'fas fa-trash-alt') {
         e.target.parentElement.remove();
         borrarTweetLocalStorage(e.target.parentElement.innerText);
     }
@@ -79,18 +83,24 @@ function localStorageListo() {
     let tweets;
     tweets = obtenerTweetsLocalStorage();
     
-    tweets.forEach(i => {
-        //crear boton de eliminar
-        const botonBorrar = document.createElement('a');
-        botonBorrar.classList = 'borrar-tweet';
-        botonBorrar.innerText = 'X';
+    tweets.forEach(tweet => {
+        const botonBorrar = document.createElement('i');
+        botonBorrar.classList = 'fas fa-trash-alt';
         
-        //crear elemento y añadirle el contenido a la lista
+        //crear un elemento li
         const li = document.createElement('li');
-        li.innerText = i;
-        //añade el boton de borrar al tweet
+        //le añade la clase clearfix al li
+        li.classList = 'clearfix';
+        //crea un elemento p
+        const p = document.createElement('p');
+        //añade el texto del tweet al parrafo
+        p.innerText = tweet;
+        //añade el parrafo al li
+        li.appendChild(p);
+        //añade el botonBorrar al li
         li.appendChild(botonBorrar);
-        //añade el tweet a la lista total
+        
+        //añade el li a la lista total de tweets
         listaTweets.appendChild(li);
     });
 }
@@ -123,8 +133,8 @@ function borrarTweetLocalStorage(tweet) {
     let tweets, tweetBorrar;
     
     //Elimina la 'X' del string tweet
-    tweetBorrar = tweet.substring(0, tweet.length-1);
-    
+    // tweetBorrar = tweet.substring(0, tweet.length-1);
+    tweetBorrar = tweet;
     tweets = obtenerTweetsLocalStorage();
     tweets.forEach((tweet, index)=>{
         //si el tweet a borrar es igual al tweet de la iteración del forEach
@@ -163,5 +173,5 @@ function ocultarErrorInputVacio() {
 
 function resetearBordeInput() {
     let input = document.getElementById('tweet');
-    input.style.border = 'initial';
+    input.style.border = '1px solid #000';
 }
