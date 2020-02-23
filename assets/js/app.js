@@ -6,10 +6,8 @@ const listaTweets = document.querySelector('#lista-tweets');
 
 //Event listeners
 
-//llama a la funcion eventListeners
-eventListeners();
-
-function eventListeners(){
+//Se autollama la funcion eventListeners
+(function eventListeners(){
     //Cuando se envia al formulario
     document.querySelector('#formulario').addEventListener('submit', agregarTweet);
     
@@ -18,7 +16,9 @@ function eventListeners(){
     
     //contenido cargado
     document.addEventListener('DOMContentLoaded', localStorageListo);
-}
+    
+    document.querySelector('#tweet').addEventListener('click', seleccionarTextoInput);
+})();
 
 
 
@@ -120,5 +120,10 @@ function borrarTweetLocalStorage(tweet) {
     });
     
     localStorage.setItem('tweets', JSON.stringify(tweets));
-    console.log(tweets);
+    // console.log(tweets);
+}
+
+//comprueba si hay un valor en el input
+function seleccionarTextoInput() {
+    document.getElementById('tweet').select();
 }
