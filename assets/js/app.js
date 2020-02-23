@@ -132,7 +132,6 @@ function borrarTweetLocalStorage(tweet) {
     //declaramos 2 variables, una para recibir el parámetro, y otra para el tweet sin la 'x'
     let tweets, tweetBorrar;
     
-    //Elimina la 'X' del string tweet
     // tweetBorrar = tweet.substring(0, tweet.length-1);
     tweetBorrar = tweet;
     tweets = obtenerTweetsLocalStorage();
@@ -153,10 +152,12 @@ function seleccionarTextoInput() {
     document.getElementById('tweet').select();
 }
 
+//enfoca en el campo de texto
 function enfocarInput() {
     document.getElementById('tweet').select();
 }
 
+//muestra el error de input vacio
 function mostrarErrorInputVacio() {
     let mensajeError = document.getElementById('errorInputVacio');
     let input = document.getElementById('tweet');
@@ -164,6 +165,7 @@ function mostrarErrorInputVacio() {
     mensajeError.style.display = 'block';
 }
 
+//oculta el error de input vacio
 function ocultarErrorInputVacio() {
     let mensajeError = document.getElementById('errorInputVacio');
     let input = document.getElementById('tweet');
@@ -171,6 +173,7 @@ function ocultarErrorInputVacio() {
     mensajeError.style.display = 'none';
 }
 
+//resetea el borde a su estado inicial
 function resetearBordeInput() {
     let input = document.getElementById('tweet');
     input.style.border = '1px solid #000';
