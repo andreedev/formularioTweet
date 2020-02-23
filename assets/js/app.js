@@ -17,7 +17,14 @@ const listaTweets = document.querySelector('#lista-tweets');
     //contenido cargado
     document.addEventListener('DOMContentLoaded', localStorageListo);
     
+    //Cuando se da click en el input
     document.querySelector('#tweet').addEventListener('click', seleccionarTextoInput);
+    
+    //Cuando se escribe una tecla en el input
+    document.querySelector('#tweet').addEventListener('keypress', ocultarErrorInputVacio);
+    
+    //Cuando se pierde el foco en el campo de texto
+    document.querySelector('#tweet').addEventListener('onblur', resetearBordeInput);
 })();
 
 
@@ -27,27 +34,35 @@ const listaTweets = document.querySelector('#lista-tweets');
 function agregarTweet(e) {
     //previene comportamiento por defecto del action del formulario
     e.preventDefault();
+    
     //leer el valor del textarea
     const tweet = document.getElementById('tweet').value;
-    //crear boton de eliminar
-    const botonBorrar = document.createElement('a');
-    //añade estilos por medio de una clase al botonBorrar
-    botonBorrar.classList = 'borrar-tweet';
-    //escribe una X en el botonBorrar
-    botonBorrar.innerText = 'X';
     
     
-    //crear elemento y añadirle el contenido a la lista
-    const li = document.createElement('li');
-    //añade el tweet al li
-    li.innerText = tweet;
-    //añade el boton de borrar al tweet
-    li.appendChild(botonBorrar);
-    //añade el tweet a la lista total
-    listaTweets.appendChild(li);
-    
-    //añadir al Local Storage
-    agregarTweetLocalStorage(tweet);
+    if (tweet === ''){
+        mostrarErrorInputVacio();
+        enfocarInput();
+    } else{
+        resetearBordeInput();
+        //crear boton de eliminar
+        const botonBorrar = document.createElement('a');
+        //añade estilos por medio de una clase al botonBorrar
+        botonBorrar.classList = 'borrar-tweet';
+        //escribe una X en el botonBorrar
+        botonBorrar.innerText = 'X';
+        
+        //crear elemento y añadirle el contenido a la lista
+        const li = document.createElement('li');
+        //añade el tweet al li
+        li.innerText = tweet;
+        //añade el boton de borrar al tweet
+        li.appendChild(botonBorrar);
+        //añade el tweet a la lista total
+        listaTweets.appendChild(li);
+        
+        //añadir al Local Storage
+        agregarTweetLocalStorage(tweet);
+    }
 }
 
 //Elimina el tweet del DOM
@@ -126,4 +141,27 @@ function borrarTweetLocalStorage(tweet) {
 //comprueba si hay un valor en el input
 function seleccionarTextoInput() {
     document.getElementById('tweet').select();
+}
+
+function enfocarInput() {
+    document.getElementById('tweet').select();
+}
+
+function mostrarErrorInputVacio() {
+    let mensajeError = document.getElementById('errorInputVacio');
+    let input = document.getElementById('tweet');
+    input.style.border = '1px solid red';
+    mensajeError.style.display = 'block';
+}
+
+function ocultarErrorInputVacio() {
+    let mensajeError = document.getElementById('errorInputVacio');
+    let input = document.getElementById('tweet');
+    input.style.border = '1px solid #0d8ab1';
+    mensajeError.style.display = 'none';
+}
+
+function resetearBordeInput() {
+    let input = document.getElementById('tweet');
+    input.style.border = 'initial';
 }

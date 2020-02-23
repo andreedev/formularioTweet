@@ -12,3 +12,28 @@ h1, h2 {
     color: red;
     font-weight: bold;
 }
+
+#errorInputVacio{
+    width: 100%;
+    text-align: left;
+    background-color: #ff6666;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #630202;
+    border: 1px solid #ca2c2c;
+    display: none;
+}
+
+body{
+    background-color: #ccc;
+}
+
+.inputBorderNormal{
+    border-top-color: #0d8ab1;
+    border-right-color: rgb(13, 138, 177);
+    border-bottom-color: rgb(13, 138, 177);
+    border-left-color: rgb(13, 138, 177);
+    outline-color: initial;
+}
