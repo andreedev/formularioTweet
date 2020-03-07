@@ -6,6 +6,9 @@ const listaTweets = document.querySelector('#lista-tweets');
     //Cuando se envia al formulario
     document.querySelector('#formulario').addEventListener('submit', agregarTweet);
     
+    //Escucha lo que escribe el usuario hasta que de enter
+    document.querySelector('#tweet').addEventListener('keypress', capturarEnter);
+    
     //edita tweet
     listaTweets.addEventListener('click', editarTweet);
     
@@ -25,7 +28,12 @@ const listaTweets = document.querySelector('#lista-tweets');
     document.querySelector('#tweet').addEventListener('onblur', resetearBordeInput);
 })();
 
-
+//Captura el enter para llamar a la función agregarTweet()
+function capturarEnter(e) {
+    if (e.keyCode === 13 && !e.shiftKey) {
+        agregarTweet(e);
+    }
+}
 
 
 //Funciones
@@ -249,3 +257,4 @@ function editarTweetLocalStorage(tweetViejo, tweetNuevo){
     //Sube al localStorage el array stringifeado ya modificado.
     localStorage.setItem('tweets', JSON.stringify(tweets));
 }
+
