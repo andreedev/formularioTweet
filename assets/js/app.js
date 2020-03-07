@@ -1,15 +1,13 @@
 //Variables
 const listaTweets = document.querySelector('#lista-tweets');
 
-
-
-
 //Event listeners
-
-//Se autollama la funcion eventListeners
 (function eventListeners(){
     //Cuando se envia al formulario
     document.querySelector('#formulario').addEventListener('submit', agregarTweet);
+    
+    //edita tweet
+    listaTweets.addEventListener('click', editarTweet);
     
     //borrar tweets
     listaTweets.addEventListener('click', borrarTweet);
@@ -17,7 +15,7 @@ const listaTweets = document.querySelector('#lista-tweets');
     //contenido cargado
     document.addEventListener('DOMContentLoaded', localStorageListo);
     
-    //Cuando se da click en el input
+    //Cuando se da click en el textarea para escribir un Tweet
     document.querySelector('#tweet').addEventListener('click', seleccionarTextoInput);
     
     //Cuando se escribe una tecla en el input
@@ -44,6 +42,10 @@ function agregarTweet(e) {
         enfocarInput();
     } else{
         resetearBordeInput();
+        //crear el botón de editar
+        const botonEditar = document.createElement('i');
+        botonEditar.classList = 'fas fa-edit';
+        
         //crear boton de eliminar
         const botonBorrar = document.createElement('i');
         botonBorrar.classList = 'fas fa-trash-alt';
@@ -58,8 +60,11 @@ function agregarTweet(e) {
         p.innerText = tweet;
         //añade el parrafo al li
         li.appendChild(p);
+        //añade el botonEditar al li
+        li.appendChild(botonEditar);
         //añade el botonBorrar al li
         li.appendChild(botonBorrar);
+        
         
         //añade el li a la lista total de tweets
         listaTweets.appendChild(li);
@@ -72,9 +77,11 @@ function agregarTweet(e) {
 //Elimina el tweet del DOM
 function borrarTweet(e) {
     e.preventDefault();
+    let tweet;
     if (e.target.className === 'fas fa-trash-alt') {
         e.target.parentElement.remove();
-        borrarTweetLocalStorage(e.target.parentElement.innerText);
+        tweet = e.target.parentElement.innerText;
+        borrarTweetLocalStorage(tweet);
     }
 }
 
@@ -84,6 +91,11 @@ function localStorageListo() {
     tweets = obtenerTweetsLocalStorage();
     
     tweets.forEach(tweet => {
+        //crear el botón de editar
+        const botonEditar = document.createElement('i');
+        botonEditar.classList = 'fas fa-edit';
+        
+        //crear boton de eliminar
         const botonBorrar = document.createElement('i');
         botonBorrar.classList = 'fas fa-trash-alt';
         
@@ -97,6 +109,8 @@ function localStorageListo() {
         p.innerText = tweet;
         //añade el parrafo al li
         li.appendChild(p);
+        //añade el botonEditar al li
+        li.appendChild(botonEditar);
         //añade el botonBorrar al li
         li.appendChild(botonBorrar);
         
@@ -129,16 +143,15 @@ function obtenerTweetsLocalStorage() {
 
 //Eliminar tweet del local storage
 function borrarTweetLocalStorage(tweet) {
-    //declaramos 2 variables, una para recibir el parámetro, y otra para el tweet sin la 'x'
     let tweets, tweetBorrar;
-    
-    // tweetBorrar = tweet.substring(0, tweet.length-1);
     tweetBorrar = tweet;
+    
     tweets = obtenerTweetsLocalStorage();
     tweets.forEach((tweet, index)=>{
         //si el tweet a borrar es igual al tweet de la iteración del forEach
         if(tweetBorrar === tweet){
-            //splice(la posición del array a eliminar, cuantos elementos después de esa posición se eliminarán);
+            //pr: parámetros
+            //splice pr:(la posición del array a eliminar, cuantos elementos después de esa posición se eliminarán);
             tweets.splice(index, 1);
         }
     });
@@ -147,25 +160,31 @@ function borrarTweetLocalStorage(tweet) {
     // console.log(tweets);
 }
 
-//comprueba si hay un valor en el input
+//==================================================================
+
+//Función que ayuda a mejorar la UI,
+//autoseleccionando todo el texto que haya en el textarea cuando se vuelva a enfocar en este
 function seleccionarTextoInput() {
     document.getElementById('tweet').select();
 }
 
-//enfoca en el campo de texto
+//==================================================================
+//Funciones que validan el formulario del tweet, se invocarán si al dar click en agregar el textarea del tweet está sin texto
+
+//Enfocará el cursor en el textarea para que el usuario escriba
 function enfocarInput() {
     document.getElementById('tweet').select();
 }
 
-//muestra el error de input vacio
+//Mostrará un mensaje de validación al usuario indicando que debe rellenar el textarea del tweet
 function mostrarErrorInputVacio() {
-    let mensajeError = document.getElementById('errorInputVacio');
     let input = document.getElementById('tweet');
     input.style.border = '1px solid red';
+    let mensajeError = document.getElementById('errorInputVacio');
     mensajeError.style.display = 'block';
 }
 
-//oculta el error de input vacio
+//Ocultará el mensaje de validación mostrado anteriormente por la función mostrarErrorInputVacio(), y el borde rojo del textarea cuando el usuario presione una tecla en el textarea, o, en otras palabras cuando escriba en el textarea del Tweet.
 function ocultarErrorInputVacio() {
     let mensajeError = document.getElementById('errorInputVacio');
     let input = document.getElementById('tweet');
@@ -173,8 +192,60 @@ function ocultarErrorInputVacio() {
     mensajeError.style.display = 'none';
 }
 
-//resetea el borde a su estado inicial
+//Al manipular los bordes por defecto del textarea con las funciones de validacion de la misma, se pierde el efecto de reseteo natural del textarea, por ello esta función: resetea el color del borde del textarea a su estado original cuando el usuario manda un tweet válido
 function resetearBordeInput() {
     let input = document.getElementById('tweet');
     input.style.border = '1px solid #000';
+}
+
+
+//Función que permite editar un tweet ya agregado previamente
+function editarTweet(e) {
+    e.preventDefault();
+    let tweet;//tweet editado
+    if (e.target.className === 'fas fa-edit') {
+        tweet = e.target.parentElement.querySelector('p');
+        //convierte el párrafo en uno editable
+        tweet.setAttribute('contenteditable', 'true');
+        tweet.style.border = 'none';
+        tweet.focus();
+        
+        const tweetViejo = tweet.innerText;
+        
+        //Y deshabilita el atributo contenteditable al salir del campo de texto o presionar enter
+        tweet.addEventListener('blur', (e)=>{
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            tweet.setAttribute('contenteditable', 'false');
+            editarTweetLocalStorage(tweetViejo, tweet);
+        });
+        tweet.addEventListener('keypress', (e)=>{
+            if (e.keyCode === 13 && !e.shiftKey) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                tweet.setAttribute('contenteditable', 'false');
+            }
+        });
+    }
+}
+
+//Edita un tweet previamente editado con el botón de editar tweet, toma 2 parámetros: (el tweetViejo que sirve como identificador del tweet a modificar, el tweet ya modificado)
+function editarTweetLocalStorage(tweetViejo, tweetNuevo){
+    //Guarda el valor del tweet ya editado
+    let tweetModificado = tweetNuevo.innerText;
+    //Guarda el valor del tweet antes de ser editado
+    let tweetAnterior = tweetViejo;
+    
+    let tweets;
+    tweets = obtenerTweetsLocalStorage();
+    
+    tweets.forEach((i, index)=>{
+        //si el tweet viejo, antes de ser modificado, es igual al tweet de la iteración del foreach, ese es el tweet del array que hay que modificar por el nuevo tweet ya modificado
+        if(tweetAnterior === i){
+            tweets[index] = tweetModificado;
+        }
+    });
+    
+    //Sube al localStorage el array stringifeado ya modificado.
+    localStorage.setItem('tweets', JSON.stringify(tweets));
 }
