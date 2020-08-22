@@ -1,4 +1,4 @@
 # formularioTweet
-Javascript basic app using localStorage
+CRUD básico usando JS y Local Storage
 
-See: https://formulario-de-tweets.netlify.app/
+Ver: https://formulario-de-tweets.netlify.app
